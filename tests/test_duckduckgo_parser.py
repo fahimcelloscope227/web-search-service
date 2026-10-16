@@ -1,4 +1,4 @@
-from app.services.providers.duckduckgo import DuckDuckGoProvider
+from app.infrastructure.providers.duckduckgo import DuckDuckGoProvider
 
 HTML = """
 <div class="result result--ad"><a class="result__a" href="https://ads.example.com">Ad</a></div>

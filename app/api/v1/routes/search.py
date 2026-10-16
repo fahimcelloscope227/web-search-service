@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, Query, status
 
 from app.api.deps import SearchServiceDep, SettingsDep
-from app.schemas.search import SearchResponse
+from app.domain.models import SearchResponse
 
 router = APIRouter(prefix="/search", tags=["search"])
 

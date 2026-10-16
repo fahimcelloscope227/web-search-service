@@ -51,7 +51,7 @@ Set `SEARCH_PROVIDER` in `.env`:
 | `google_cse` | Google Programmable Search | `GOOGLE_API_KEY` + `GOOGLE_CSE_ID` |
 | `duckduckgo` (default) | DuckDuckGo | nothing; good for local dev |
 
-The service doesn't scrape Google's result pages directly, because that breaks against Google's bot detection and goes against its terms of service. To add another backend, subclass `SearchProvider` in `app/services/providers/` and register it in `build_provider`.
+The service doesn't scrape Google's result pages directly, because that breaks against Google's bot detection and goes against its terms of service. To add another backend, subclass `HttpSearchProvider` in `app/infrastructure/providers/` and register it in `build_provider`.
 
 ## Configuration
 
@@ -69,16 +69,24 @@ ruff check . && ruff format --check .
 
 ## Layout
 
+Layered after Clean Architecture; dependencies point inward (`domain` knows nothing of the web framework or HTTP client).
+
 ```
 app/
-├── main.py                    # app factory, lifespan (shared pooled httpx client)
-├── core/                      # settings, logging, exceptions → JSON error responses
-├── api/deps.py                # dependency injection wiring
-├── api/v1/routes/search.py    # HTTP endpoint (validation only)
-├── schemas/search.py          # Pydantic request/response models
-└── services/
-    ├── search_service.py      # orchestrates search + concurrent fetching
-    ├── content_extractor.py   # download (size/type-guarded) + main-text extraction
-    └── providers/             # pluggable search backends
-tests/                         # API + parser tests with fake provider/extractor
+├── main.py                        # composition root: app factory, lifespan (shared pooled httpx client)
+├── domain/                        # framework-free core
+│   ├── models.py                  # entities / request-response models
+│   ├── exceptions.py              # domain errors (map to HTTP status, no framework import)
+│   └── ports.py                   # SearchProvider + ContentExtractor interfaces
+├── application/
+│   └── search_service.py          # use case: orchestrates search + concurrent fetching
+├── infrastructure/                # adapters implementing the ports
+│   ├── content_extractor.py       # download (size/type-guarded) + main-text extraction
+│   └── providers/                 # pluggable search backends + build_provider factory
+├── api/                           # presentation (FastAPI)
+│   ├── deps.py                    # dependency injection wiring
+│   ├── errors.py                  # domain errors → JSON error responses
+│   └── v1/routes/search.py        # HTTP endpoint (validation only)
+└── core/                          # settings, logging
+tests/                             # API + parser tests with fake provider/extractor
 ```

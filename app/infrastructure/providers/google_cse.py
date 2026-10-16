@@ -1,11 +1,11 @@
 import httpx
 
-from app.core.exceptions import SearchProviderError
-from app.schemas.search import SearchHit
-from app.services.providers.base import SearchProvider
+from app.domain.exceptions import SearchProviderError
+from app.domain.models import SearchHit
+from app.infrastructure.providers.base import HttpSearchProvider
 
 
-class GoogleCSEProvider(SearchProvider):
+class GoogleCSEProvider(HttpSearchProvider):
     """Google Programmable Search Engine (Custom Search JSON API)."""
 
     name = "google_cse"
