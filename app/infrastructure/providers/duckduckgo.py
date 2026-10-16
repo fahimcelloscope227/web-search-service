@@ -3,12 +3,12 @@ from urllib.parse import parse_qs, unquote, urlparse
 import httpx
 from selectolax.parser import HTMLParser
 
-from app.core.exceptions import SearchProviderError
-from app.schemas.search import SearchHit
-from app.services.providers.base import SearchProvider
+from app.domain.exceptions import SearchProviderError
+from app.domain.models import SearchHit
+from app.infrastructure.providers.base import HttpSearchProvider
 
 
-class DuckDuckGoProvider(SearchProvider):
+class DuckDuckGoProvider(HttpSearchProvider):
     """Keyless provider using DuckDuckGo's HTML endpoint. Good for local dev; use Serper/CSE in production."""
 
     name = "duckduckgo"

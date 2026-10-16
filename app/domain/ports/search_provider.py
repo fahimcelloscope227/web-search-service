@@ -1,18 +1,12 @@
 from abc import ABC, abstractmethod
 
-import httpx
-
-from app.schemas.search import SearchHit
+from app.domain.models.search_hit import SearchHit
 
 
 class SearchProvider(ABC):
     """Contract every search backend implements."""
 
     name: str
-
-    def __init__(self, client: httpx.AsyncClient, timeout: float) -> None:
-        self._client = client
-        self._timeout = timeout
 
     @abstractmethod
     async def search(self, query: str, limit: int) -> list[SearchHit]:

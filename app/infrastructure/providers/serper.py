@@ -1,11 +1,11 @@
 import httpx
 
-from app.core.exceptions import SearchProviderError
-from app.schemas.search import SearchHit
-from app.services.providers.base import SearchProvider
+from app.domain.exceptions import SearchProviderError
+from app.domain.models import SearchHit
+from app.infrastructure.providers.base import HttpSearchProvider
 
 
-class SerperProvider(SearchProvider):
+class SerperProvider(HttpSearchProvider):
     """Google search results via https://serper.dev."""
 
     name = "serper"

@@ -4,11 +4,10 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from app.api.deps import get_search_service
+from app.application.search_service import SearchService
+from app.domain.models import ExtractedContent, FetchStatus, SearchHit
+from app.domain.ports import SearchProvider
 from app.main import app
-from app.schemas.search import FetchStatus, SearchHit
-from app.services.content_extractor import ExtractedContent
-from app.services.providers.base import SearchProvider
-from app.services.search_service import SearchService
 
 
 class FakeProvider(SearchProvider):
@@ -41,7 +40,7 @@ def fake_provider() -> FakeProvider:
 async def client(fake_provider: FakeProvider) -> AsyncIterator[AsyncClient]:
     app.dependency_overrides[get_search_service] = lambda: SearchService(
         fake_provider,
-        FakeExtractor(),  # type: ignore[arg-type]
+        FakeExtractor(),
         max_concurrency=5,
     )
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:

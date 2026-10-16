@@ -3,9 +3,8 @@ import logging
 import time
 from datetime import UTC, datetime
 
-from app.schemas.search import SearchHit, SearchResponse, SearchResult
-from app.services.content_extractor import ContentExtractor
-from app.services.providers import SearchProvider
+from app.domain.models import SearchHit, SearchResponse, SearchResult
+from app.domain.ports import ContentExtractor, SearchProvider
 
 logger = logging.getLogger(__name__)
 

@@ -1,13 +1,13 @@
 import httpx
 
 from app.core.config import SearchProviderName, Settings
-from app.core.exceptions import ProviderConfigurationError
-from app.services.providers.base import SearchProvider
-from app.services.providers.duckduckgo import DuckDuckGoProvider
-from app.services.providers.google_cse import GoogleCSEProvider
-from app.services.providers.serper import SerperProvider
+from app.domain.exceptions import ProviderConfigurationError
+from app.domain.ports import SearchProvider
+from app.infrastructure.providers.duckduckgo import DuckDuckGoProvider
+from app.infrastructure.providers.google_cse import GoogleCSEProvider
+from app.infrastructure.providers.serper import SerperProvider
 
-__all__ = ["SearchProvider", "build_provider"]
+__all__ = ["build_provider"]
 
 
 def build_provider(settings: Settings, client: httpx.AsyncClient) -> SearchProvider:

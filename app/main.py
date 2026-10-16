@@ -4,9 +4,9 @@ from contextlib import asynccontextmanager
 import httpx
 from fastapi import FastAPI
 
+from app.api.errors import register_exception_handlers
 from app.api.v1.router import api_router
 from app.core.config import get_settings
-from app.core.exceptions import register_exception_handlers
 from app.core.logging import configure_logging
 
 

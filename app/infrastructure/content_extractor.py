@@ -1,25 +1,15 @@
 import asyncio
 import logging
-from dataclasses import dataclass
 
 import httpx
 import trafilatura
 
-from app.schemas.search import FetchStatus
+from app.domain.models import ExtractedContent, FetchStatus
 
 logger = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True, slots=True)
-class ExtractedContent:
-    status: FetchStatus
-    text: str | None = None
-    word_count: int = 0
-    truncated: bool = False
-    error: str | None = None
-
-
-class ContentExtractor:
+class HttpContentExtractor:
     """Downloads a page and pulls out its main readable text (no nav, ads, boilerplate)."""
 
     def __init__(
